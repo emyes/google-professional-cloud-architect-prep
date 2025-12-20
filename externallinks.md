@@ -1,0 +1,1 @@
+https://medium.com/google-cloud/google-cloud-logging-and-security-e00c7440f45b
