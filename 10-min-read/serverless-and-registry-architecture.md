@@ -1,5 +1,33 @@
-
 # Architecting Modern Serverless Workloads on Google Cloud: A Technical Whitepaper
+
+## Table of Contents
+
+- [Architecting Modern Serverless Workloads on Google Cloud: A Technical Whitepaper](#architecting-modern-serverless-workloads-on-google-cloud-a-technical-whitepaper)
+  - [Table of Contents](#table-of-contents)
+  - [1.0 Introduction: Embracing the Serverless Paradigm on Google Cloud](#10-introduction-embracing-the-serverless-paradigm-on-google-cloud)
+  - [2.0 A Strategic Comparison of Google Cloud Serverless Compute Options](#20-a-strategic-comparison-of-google-cloud-serverless-compute-options)
+  - [3.0 Deep Dive: Cloud Run for Scalable Containerized Services](#30-deep-dive-cloud-run-for-scalable-containerized-services)
+    - [3.1 Core Architecture and Scaling](#31-core-architecture-and-scaling)
+    - [3.2 Configuration and Security](#32-configuration-and-security)
+    - [3.3 Advanced Networking and Deployment Patterns](#33-advanced-networking-and-deployment-patterns)
+    - [3.4 Use Case Analysis: Services vs. Jobs](#34-use-case-analysis-services-vs-jobs)
+  - [4.0 Deep Dive: App Engine for Managed Application Platforms](#40-deep-dive-app-engine-for-managed-application-platforms)
+    - [4.1 Architectural Decision: Standard vs. Flexible Environment](#41-architectural-decision-standard-vs-flexible-environment)
+    - [4.2 State Management and Background Processing](#42-state-management-and-background-processing)
+    - [4.3 Deployment and Traffic Management](#43-deployment-and-traffic-management)
+  - [5.0 Deep Dive: Cloud Functions for Event-Driven Compute](#50-deep-dive-cloud-functions-for-event-driven-compute)
+    - [5.1 Core Concepts: Generations, Triggers, and Runtimes](#51-core-concepts-generations-triggers-and-runtimes)
+    - [5.2 Operational Considerations](#52-operational-considerations)
+    - [5.3 Security and Error Handling](#53-security-and-error-handling)
+  - [6.0 The Foundation: Artifact Registry for a Secure Software Supply Chain](#60-the-foundation-artifact-registry-for-a-secure-software-supply-chain)
+    - [6.1 Repository Management and CI/CD Integration](#61-repository-management-and-cicd-integration)
+    - [6.2 Security and Governance](#62-security-and-governance)
+    - [6.3 Operational Best Practices](#63-operational-best-practices)
+  - [7.0 Implementing Automated CI/CD and Infrastructure as Code](#70-implementing-automated-cicd-and-infrastructure-as-code)
+    - [7.1 CI/CD Patterns with Cloud Build and Cloud Deploy](#71-cicd-patterns-with-cloud-build-and-cloud-deploy)
+    - [7.2 Infrastructure as Code with Cloud Deployment Manager (CDM)](#72-infrastructure-as-code-with-cloud-deployment-manager-cdm)
+  - [8.0 Architectural Anti-Patterns and Best Practices](#80-architectural-anti-patterns-and-best-practices)
+  - [9.0 Conclusion: Architecting for Agility and Security](#90-conclusion-architecting-for-agility-and-security)
 
 ## 1.0 Introduction: Embracing the Serverless Paradigm on Google Cloud
 

@@ -1,4 +1,15 @@
-Architecting a Defense-in-Depth Strategy for Google Cloud Networks
+# Architecting a Defense-in-Depth Strategy for Google Cloud Networks
+
+## Table of Contents
+
+- [1.0 Introduction: The Google Cloud Networking Paradigm](#10-introduction-the-google-cloud-networking-paradigm)
+- [2.0 Foundational Security Through VPC Architecture and Governance](#20-foundational-security-through-vpc-architecture-and-governance)
+- [3.0 Securing the Network Perimeter and Ingress Traffic](#30-securing-the-network-perimeter-and-ingress-traffic)
+- [4.0 Implementing Zero-Trust Access and Data Exfiltration Controls](#40-implementing-zero-trust-access-and-data-exfiltration-controls)
+- [5.0 Architecting Security for Modern Connectivity Patterns](#50-architecting-security-for-modern-connectivity-patterns)
+- [6.0 Enhancing Security Posture with Network Intelligence](#60-enhancing-security-posture-with-network-intelligence)
+- [7.0 Balancing Security, Performance, and Cost](#70-balancing-security-performance-and-cost)
+- [8.0 Conclusion: A Multi-Layered Approach to GCP Network Security](#80-conclusion-a-multi-layered-approach-to-gcp-network-security)
 
 1.0 Introduction: The Google Cloud Networking Paradigm
 
@@ -202,7 +213,7 @@ Google Cloud provides two distinct Network Service Tiers for traffic between you
 | Premium Tier                                                                 | Standard Tier                                                                 |
 |------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
 | Leverages Google's private, high-performance global backbone to carry traffic as close to the end-user as possible before egressing to the public internet. | Uses standard carrier networks to route traffic over the public internet, egressing from Google's network in the region where the workload is hosted. |
-| Use Case: Ideal for performance-sensitive, global applications that require the lowest latency, highest reliability, and global load balancing capabilities. | Use Case: A cost-effective choice for applications that are less sensitive to latency or are primarily serving users within a single geographic region. |
+| **Use Case:** Ideal for performance-sensitive, global applications that require the lowest latency, highest reliability, and global load balancing capabilities. | **Use Case:** A cost-effective choice for applications that are less sensitive to latency or are primarily serving users within a single geographic region. |
 
 **Network Service Tiers**
 
