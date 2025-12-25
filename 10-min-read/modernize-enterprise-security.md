@@ -59,11 +59,14 @@ For security leaders, the strategic implication is clear: this model enables pow
 
 The Principle of Least Privilege (PoLP) is a foundational security concept that restricts access privileges to the minimum necessary for a user or service to perform its job. Google Cloud IAM is designed to facilitate the strict implementation of PoLP through its granular role-based access control system, which is categorized into three main types.
 
-| Role Type | Scope of Access | Strategic Recommendation for Enterprises |
-| :--- | :--- | :--- |
-| Basic (Primitive) Roles | Broad, cross-service permissions (Owner, Editor, Viewer) that encompass thousands of individual permissions across all Google Cloud services. | Avoid in Production. These roles predate modern IAM and invariably grant more access than required, leading to significant security risks and PoLP violations. |
-| Predefined Roles | Granular, service-specific roles managed and automatically updated by Google (e.g., roles/compute.instanceAdmin, roles/storage.objectViewer). | Default Choice. As the preferred mechanism for adhering to PoLP, these roles provide fine-grained access to specific resources, enhancing security. |
-| Custom Roles | Tailored permission sets created by an organization to bundle one or more supported IAM permissions when predefined roles are insufficient. | Use when specific organizational needs cannot be met by predefined roles. Requires careful design and maintenance to prevent permission drift. |
+
+**IAM Role Types and Recommendations**
+
+| Role Type              | Scope of Access                                                                                      | Strategic Recommendation for Enterprises                                                                 |
+|:----------------------|:---------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------|
+| Basic (Primitive) Roles| Broad, cross-service permissions (Owner, Editor, Viewer) that encompass thousands of individual permissions across all Google Cloud services. | Avoid in Production. These roles predate modern IAM and invariably grant more access than required, leading to significant security risks and PoLP violations. |
+| Predefined Roles       | Granular, service-specific roles managed and automatically updated by Google (e.g., roles/compute.instanceAdmin, roles/storage.objectViewer). | Default Choice. As the preferred mechanism for adhering to PoLP, these roles provide fine-grained access to specific resources, enhancing security. |
+| Custom Roles           | Tailored permission sets created by an organization to bundle one or more supported IAM permissions when predefined roles are insufficient. | Use when specific organizational needs cannot be met by predefined roles. Requires careful design and maintenance to prevent permission drift. |
 
 By architecting access control around predefined and custom roles, organizations can move away from the high-risk, overly permissive nature of basic roles. This foundational commitment to PoLP is the first step in building a modern, identity-centric security model. We will now build upon these principles to explore how to secure the human workforce.
 
@@ -117,10 +120,13 @@ Workload Identity Federation (WIF) is the secure, modern alternative to service 
 
 The core mechanism of WIF is based on the OAuth 2.0 token exchange specification. An external workload authenticates against its native Identity Provider (e.g., AWS IAM) and receives a short-lived token. This external token is then presented to Google Cloud's Security Token Service, which exchanges it for a short-lived Google Cloud access token. This process completely eliminates the need for applications to handle or store static Google Cloud credentials, dramatically improving the security posture.
 
-| Feature | Service Account Keys | Workload Identity Federation |
-| :--- | :--- | :--- |
-| Credential Type | Long-lived static private key. | Short-lived, ephemeral token from an external IdP (OIDC/SAML). |
-| Security Risk | High: Vulnerable to leakage, theft, and misuse. Difficult to track usage due to non-repudiation threats. | Low: Token expiration limits exposure. No static keys to manage or leak. |
+
+**Service Account Keys vs. Workload Identity Federation**
+
+| Feature            | Service Account Keys                        | Workload Identity Federation                                 |
+|:-------------------|:--------------------------------------------|:-------------------------------------------------------------|
+| Credential Type    | Long-lived static private key.              | Short-lived, ephemeral token from an external IdP (OIDC/SAML).|
+| Security Risk      | High: Vulnerable to leakage, theft, and misuse. Difficult to track usage due to non-repudiation threats. | Low: Token expiration limits exposure. No static keys to manage or leak. |
 | Key Management Burden | High: Requires manual storage, rotation, and protection. | None: The key lifecycle is automated and managed by the external IdP. |
 
 ### 4.3 Internal Workload Security: Service Account Impersonation

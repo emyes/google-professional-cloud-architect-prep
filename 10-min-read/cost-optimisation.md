@@ -75,12 +75,15 @@ Beyond idle resources, significant savings can be realized by scheduling non-pro
 
 Google Cloud offers different pricing models to accommodate various workload types. For fault-tolerant, non-critical workloads, Spot VMs provide access to compute capacity at a steep discount in exchange for the possibility of preemption.
 
-| Feature | Standard VM | Spot VM |
-|---------|-------------|---------|
-| **Price** | Standard On-Demand | Up to 91% Discount |
-| **Availability** | High (SLA backed) | Subject to preemption |
-| **Use Case** | Production, 24/7 Ops | Batch processing, big data jobs, media transcoding, financial modeling, and other fault-tolerant applications |
-| **Runtime Limit** | None | None (Legacy Preemptible VMs were 24h) |
+
+**Standard VM vs. Spot VM Comparison**
+
+| Feature         | Standard VM           | Spot VM                                                                 |
+|:---------------|:----------------------|:-----------------------------------------------------------------------|
+| **Price**      | Standard On-Demand    | Up to 91% Discount                                                     |
+| **Availability** | High (SLA backed)   | Subject to preemption                                                  |
+| **Use Case**   | Production, 24/7 Ops  | Batch processing, big data jobs, media transcoding, financial modeling, and other fault-tolerant applications |
+| **Runtime Limit** | None               | None (Legacy Preemptible VMs were 24h)                                 |
 
 The economic benefit of Spot VMs is substantial, with discounts of up to 91% compared to standard on-demand instances. They are the ideal choice for workloads designed to handle interruptions. It is important to note that modern Spot VMs have no maximum runtime limit, an improvement over legacy Preemptible VMs which were terminated after 24 hours.
 

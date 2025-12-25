@@ -84,11 +84,14 @@ The primary mechanism for cost optimization in Cloud Logging is the effective us
 * **Apply at the right level**: Organization-level exclusions apply to all projects; project-level exclusions provide granular control.
 * **Document exclusions**: Maintain clear documentation of what is being excluded and why, as this impacts incident investigations.
 * **Monitor exclusion impact**: Track the volume of excluded logs to ensure exclusions are working as expected.
-| Bucket Type | Default Retention Period | Architectural Significance |
-| :--- | :--- | :--- |
-| `_Required` | 400 days | Reserved for mandatory audit logs (e.g., Admin Activity). Its retention is not configurable, and it incurs no storage costs, ensuring regulatory and security assurance. |
-| `_Default` | 30 days | Stores most standard operational logs. The retention period is configurable, allowing organizations to adjust it based on operational needs and cost considerations. |
-| User-defined | 30 days | Allows for the creation of custom buckets with specific, configurable retention settings. This enables granular control for different log streams to meet specific compliance or cost-management goals. |
+
+**Log Bucket Types and Retention**
+
+| Bucket Type   | Default Retention Period | Architectural Significance |
+|:-------------|:------------------------|:--------------------------|
+| `_Required`  | 400 days                | Reserved for mandatory audit logs (e.g., Admin Activity). Its retention is not configurable, and it incurs no storage costs, ensuring regulatory and security assurance. |
+| `_Default`   | 30 days                 | Stores most standard operational logs. The retention period is configurable, allowing organizations to adjust it based on operational needs and cost considerations. |
+| User-defined | 30 days                 | Allows for the creation of custom buckets with specific, configurable retention settings. This enables granular control for different log streams to meet specific compliance or cost-management goals. |
 
 By architecting custom log buckets and routing specific log types to them via sinks, organizations can apply precise retention policies, ensuring that operational logs are kept only as long as needed while compliance logs are retained for their required duration.
 
@@ -284,11 +287,14 @@ For high-traffic applications, tracing every request can generate significant co
 
 **Recommended Sampling Rates:**
 
-| Traffic Volume | Suggested Sample Rate | Rationale |
-| :--- | :--- | :--- |
-| <1000 req/sec | 100% | Minimal cost, maximum visibility |
-| 1K-10K req/sec | 10-25% | Balanced cost and coverage |
-| >10K req/sec | 1-10% | Cost control while capturing anomalies |
+
+**Recommended Trace Sampling Rates**
+
+| Traffic Volume    | Suggested Sample Rate | Rationale                          |
+|:-----------------|:---------------------|:-----------------------------------|
+| <1000 req/sec    | 100%                 | Minimal cost, maximum visibility   |
+| 1K-10K req/sec   | 10-25%               | Balanced cost and coverage         |
+| >10K req/sec     | 1-10%                | Cost control while capturing anomalies |
 
 **Critical Rule**: Always trace errors at 100%, regardless of overall sampling rate. This ensures that problematic requests are never missed.
 
@@ -482,13 +488,16 @@ Understanding what drives costs is the first step to optimization:
 
 The following table summarizes the key cost drivers for each service component and the architectural principles that guide their optimization.
 
-| Service Component | Billable Unit | Primary Optimization Tactic | Architectural Principle |
-| :--- | :--- | :--- | :--- |
-| Cloud Logging Ingestion | Log volume (MiB/GB) | Utilize exclusion filters at the Logs Router to discard high-volume, low-value logs before ingestion. | Shift Left on Log Volume |
-| Cloud Logging Storage | Log bucket retention (per GiB per month over 30 days) | Route long-term archival logs via sinks to Cloud Storage (using cheaper tiers) and reduce retention periods on operational buckets. | Tiered Storage Strategy |
-| Cloud Monitoring | Metrics (per MiB or per million samples) | Minimize unnecessary labels in custom metrics to reduce unique time series count. | Cardinality Governance |
-| Uptime Checks | Per 1,000 executions | Configure alerting policies to trigger only on failures from at least two regions to reduce false positives and unnecessary checks. | High-Signal Alerting |
-| Cloud Trace | Ingested Spans (per million spans) | Implement sampling policies in high-traffic applications to control the volume of ingested trace data. | Controlled Observability Overhead |
+
+**Optimization Tactics by Service**
+
+| Service Component         | Billable Unit                              | Primary Optimization Tactic                                                                 | Architectural Principle                |
+|:-------------------------|:-------------------------------------------|:-------------------------------------------------------------------------------------------|:---------------------------------------|
+| Cloud Logging Ingestion  | Log volume (MiB/GB)                        | Utilize exclusion filters at the Logs Router to discard high-volume, low-value logs before ingestion. | Shift Left on Log Volume               |
+| Cloud Logging Storage    | Log bucket retention (per GiB per month over 30 days) | Route long-term archival logs via sinks to Cloud Storage (using cheaper tiers) and reduce retention periods on operational buckets. | Tiered Storage Strategy                |
+| Cloud Monitoring         | Metrics (per MiB or per million samples)   | Minimize unnecessary labels in custom metrics to reduce unique time series count.           | Cardinality Governance                 |
+| Uptime Checks            | Per 1,000 executions                       | Configure alerting policies to trigger only on failures from at least two regions to reduce false positives and unnecessary checks. | High-Signal Alerting                   |
+| Cloud Trace              | Ingested Spans (per million spans)         | Implement sampling policies in high-traffic applications to control the volume of ingested trace data. | Controlled Observability Overhead      |
 
 ### 8.3 FinOps Best Practices
 
@@ -517,13 +526,16 @@ Cloud Audit Logs provide a comprehensive record of administrative activities and
 
 **Audit Log Types:**
 
-| Log Type | What It Captures | Enabled by Default | Storage Location | Cost |
-| :--- | :--- | :--- | :--- | :--- |
-| Admin Activity | API calls that modify configuration or metadata | Yes | `_Required` bucket | No cost |
-| Data Access | API calls that read/write user data | No (except BigQuery) | `_Default` bucket | Billable |
-| System Event | Google-initiated system operations | Yes | `_Required` bucket | No cost |
-| Policy Denied | Access attempts that were denied | No | `_Default` bucket | Billable |
-| Access Transparency | Actions performed by Google personnel | Yes (if applicable) | `_Required` bucket | No cost |
+
+**Audit Log Types and Storage**
+
+| Log Type           | What It Captures                              | Enabled by Default         | Storage Location     | Cost      |
+|:------------------|:----------------------------------------------|:--------------------------|:---------------------|:----------|
+| Admin Activity    | API calls that modify configuration or metadata| Yes                       | `_Required` bucket   | No cost   |
+| Data Access       | API calls that read/write user data           | No (except BigQuery)      | `_Default` bucket    | Billable  |
+| System Event      | Google-initiated system operations            | Yes                       | `_Required` bucket   | No cost   |
+| Policy Denied     | Access attempts that were denied              | No                        | `_Default` bucket    | Billable  |
+| Access Transparency| Actions performed by Google personnel         | Yes (if applicable)       | `_Required` bucket   | No cost   |
 
 **Critical Understanding:**
 * Admin Activity logs **cannot be disabled** and are stored in the `_Required` bucket with fixed 400-day retention.

@@ -28,9 +28,17 @@ For organizations with multiple teams or business units, the Shared VPC model pr
 
 This structure enables a central network security team, operating within the Host Project, to manage core resources like subnets, routes, and firewalls. This ensures that security policies are applied consistently across the entire organization. Meanwhile, application and development teams in the Service Projects are delegated permissions to deploy their specific workloads, such as virtual machines and GKE clusters, into the pre-approved and secured network segments.
 
-Connectivity Model	Architecture	Transitivity	Governance
-Shared VPC	Host/Service projects sharing a network	Natively transitive within the VPC	Centralized in the Host Project
-VPC Peering	Direct connection between two VPCs	Non-transitive	Decentralized per VPC
+| Connectivity Model | Architecture                          | Transitivity                   | Governance                      |
+|--------------------|---------------------------------------|-------------------------------|----------------------------------|
+| Shared VPC         | Host/Service projects sharing a network| Natively transitive within the VPC | Centralized in the Host Project |
+| VPC Peering        | Direct connection between two VPCs     | Non-transitive                | Decentralized per VPC            |
+
+**Connectivity Model Comparison**
+
+| Connectivity Model | Architecture                           | Transitivity                    | Governance                       |
+|:------------------|:---------------------------------------|:-------------------------------|:---------------------------------|
+| Shared VPC        | Host/Service projects sharing a network | Natively transitive within the VPC | Centralized in the Host Project  |
+| VPC Peering       | Direct connection between two VPCs      | Non-transitive                 | Decentralized per VPC             |
 
 While VPC Peering provides a way to connect two separate VPC networks, its limitations become apparent at scale. Peering is strictly non-transitive; if Network A is peered with B, and B is peered with C, Network A cannot communicate with C through B. Furthermore, peered networks cannot have overlapping IP ranges, a common challenge in large enterprises. While Private NAT provides a managed service to solve the IP overlap problem for hybrid connections, for building scalable, inter-VPC hub-and-spoke topologies, Network Connectivity Center is the preferred solution.
 
@@ -61,9 +69,17 @@ Cloud Armor’s key security features include:
 
 Cloud Armor policies are categorized by where they are enforced in the request path, providing granular control over different types of backends.
 
-Policy Type	Protection Scope
-Backend Security Policies	Protects origin servers (VMs, containers) behind an external load balancer. Evaluates requests that miss the cache or are for dynamic content.
-Edge Security Policies	Protects content in Cloud CDN and Cloud Storage buckets. Evaluates all requests at the edge, before a cache lookup, blocking threats closer to the source.
+| Policy Type                | Protection Scope                                                                                                                        |
+|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| Backend Security Policies  | Protects origin servers (VMs, containers) behind an external load balancer. Evaluates requests that miss the cache or are for dynamic content. |
+| Edge Security Policies     | Protects content in Cloud CDN and Cloud Storage buckets. Evaluates all requests at the edge, before a cache lookup, blocking threats closer to the source. |
+
+**Cloud Armor Policy Types**
+
+| Policy Type               | Protection Scope                                                                                                                         |
+|:-------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------|
+| Backend Security Policies | Protects origin servers (VMs, containers) behind an external load balancer. Evaluates requests that miss the cache or are for dynamic content. |
+| Edge Security Policies    | Protects content in Cloud CDN and Cloud Storage buckets. Evaluates all requests at the edge, before a cache lookup, blocking threats closer to the source. |
 
 Advanced Firewall Architectures
 
@@ -75,13 +91,25 @@ Securing Hybrid Connectivity
 
 For connecting on-premises data centers to Google Cloud, architects must choose a solution that meets their security, performance, and compliance needs.
 
-Feature	Cloud Interconnect	Cloud VPN
-Connection Type	Private, direct or partner physical connections	Encrypted tunnels over the public internet
-Bandwidth	Dedicated: 10 Gbps or 100 Gbps per circuit; Partner: 50 Mbps up to 50 Gbps	Up to 250 Gbps per HA VPN gateway (aggregated throughput across all tunnels)
-SLA	Up to 99.99% with redundant configurations	Up to 99.99% for HA VPN
-Routing	Static or dynamic (BGP via Cloud Router)	Static or dynamic (BGP with HA VPN)
-Encryption	Not encrypted by default (traffic is private)	IPsec-based, end-to-end in-transit encryption
-Typical Use Cases	Large-scale data transfer, latency-sensitive applications, data center extension	Hybrid connectivity, secure data transfer, compliance requirements for encryption
+| Feature            | Cloud Interconnect                                              | Cloud VPN                                                                 |
+|--------------------|---------------------------------------------------------------|---------------------------------------------------------------------------|
+| Connection Type    | Private, direct or partner physical connections               | Encrypted tunnels over the public internet                                 |
+| Bandwidth          | Dedicated: 10/100 Gbps per circuit; Partner: 50 Mbps–50 Gbps  | Up to 250 Gbps per HA VPN gateway (aggregated throughput across all tunnels)|
+| SLA                | Up to 99.99% with redundant configurations                    | Up to 99.99% for HA VPN                                                    |
+| Routing            | Static or dynamic (BGP via Cloud Router)                      | Static or dynamic (BGP with HA VPN)                                        |
+| Encryption         | Not encrypted by default (traffic is private)                 | IPsec-based, end-to-end in-transit encryption                              |
+| Typical Use Cases  | Large-scale data transfer, latency-sensitive applications, data center extension | Hybrid connectivity, secure data transfer, compliance requirements for encryption |
+
+**Hybrid Connectivity Options**
+
+| Feature           | Cloud Interconnect                                               | Cloud VPN                                                                  |
+|:------------------|:----------------------------------------------------------------|:---------------------------------------------------------------------------|
+| Connection Type   | Private, direct or partner physical connections                  | Encrypted tunnels over the public internet                                 |
+| Bandwidth         | Dedicated: 10/100 Gbps per circuit; Partner: 50 Mbps–50 Gbps    | Up to 250 Gbps per HA VPN gateway (aggregated throughput across all tunnels)|
+| SLA               | Up to 99.99% with redundant configurations                      | Up to 99.99% for HA VPN                                                    |
+| Routing           | Static or dynamic (BGP via Cloud Router)                        | Static or dynamic (BGP with HA VPN)                                        |
+| Encryption        | Not encrypted by default (traffic is private)                   | IPsec-based, end-to-end in-transit encryption                              |
+| Typical Use Cases | Large-scale data transfer, latency-sensitive applications, data center extension | Hybrid connectivity, secure data transfer, compliance requirements for encryption |
 
 It is critical to understand that while traffic over Cloud Interconnect is private because it bypasses the public internet, it is not encrypted by default. For organizations with strict compliance mandates that require encryption for all data in transit, HA VPN over Cloud Interconnect must be deployed. This architecture routes encrypted IPsec traffic through the private Interconnect connection to meet regulatory or security requirements even on private circuits.
 
@@ -125,12 +153,23 @@ Securing Serverless Workloads
 
 Connecting serverless workloads to resources within a VPC has evolved from using a Serverless VPC Access Connector—a managed proxy VM—to the more efficient Direct VPC Egress for Cloud Run. This new, connector-less approach provides a direct path for serverless traffic into a VPC, bringing substantial improvements in performance, cost, and security.
 
-Feature	Direct VPC Egress	Serverless VPC Access Connector
-Latency	Lower (no proxy hop)	Higher (proxy overhead)
-Throughput	Higher	Lower
-Cost	Network charges only; scales to zero	Compute Engine VM charges apply
-Security	Supports per-revision network tags, allowing for more granular firewall rules than the shared connector.	Shared tags per connector
-IP Consumption	Consumes one IP per active instance	Consumes a /28 subnet range
+| Feature         | Direct VPC Egress                                              | Serverless VPC Access Connector           |
+|-----------------|---------------------------------------------------------------|-------------------------------------------|
+| Latency         | Lower (no proxy hop)                                          | Higher (proxy overhead)                   |
+| Throughput      | Higher                                                        | Lower                                     |
+| Cost            | Network charges only; scales to zero                          | Compute Engine VM charges apply           |
+| Security        | Supports per-revision network tags, allowing for more granular firewall rules than the shared connector. | Shared tags per connector                 |
+| IP Consumption  | Consumes one IP per active instance                           | Consumes a /28 subnet range               |
+
+**Serverless Connectivity Comparison**
+
+| Feature        | Direct VPC Egress                                               | Serverless VPC Access Connector           |
+|:--------------|:----------------------------------------------------------------|:------------------------------------------|
+| Latency       | Lower (no proxy hop)                                            | Higher (proxy overhead)                   |
+| Throughput    | Higher                                                          | Lower                                     |
+| Cost          | Network charges only; scales to zero                            | Compute Engine VM charges apply           |
+| Security      | Supports per-revision network tags, allowing for more granular firewall rules than the shared connector. | Shared tags per connector                 |
+| IP Consumption| Consumes one IP per active instance                             | Consumes a /28 subnet range               |
 
 Direct VPC Egress is now the recommended approach for new Cloud Run deployments. Its primary advantages are lower latency and higher throughput, achieved by eliminating the extra network hop through a proxy VM. Critically, its cost model aligns with the serverless "pay-as-you-go" philosophy; there are no charges for idle connector instances, as costs are based solely on network traffic. This makes it a more cost-effective and performant solution for securing serverless connectivity.
 
@@ -160,9 +199,17 @@ Network Service Tiers
 
 Google Cloud provides two distinct Network Service Tiers for traffic between your cloud resources and the internet, allowing you to choose the optimal balance of performance and cost.
 
-Premium Tier	Standard Tier
-Leverages Google's private, high-performance global backbone to carry traffic as close to the end-user as possible before egressing to the public internet.	Uses standard carrier networks to route traffic over the public internet, egressing from Google's network in the region where the workload is hosted.
-Use Case: Ideal for performance-sensitive, global applications that require the lowest latency, highest reliability, and global load balancing capabilities.	Use Case: A cost-effective choice for applications that are less sensitive to latency or are primarily serving users within a single geographic region.
+| Premium Tier                                                                 | Standard Tier                                                                 |
+|------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| Leverages Google's private, high-performance global backbone to carry traffic as close to the end-user as possible before egressing to the public internet. | Uses standard carrier networks to route traffic over the public internet, egressing from Google's network in the region where the workload is hosted. |
+| Use Case: Ideal for performance-sensitive, global applications that require the lowest latency, highest reliability, and global load balancing capabilities. | Use Case: A cost-effective choice for applications that are less sensitive to latency or are primarily serving users within a single geographic region. |
+
+**Network Service Tiers**
+
+| Premium Tier                                                                 | Standard Tier                                                                 |
+|:----------------------------------------------------------------------------|:------------------------------------------------------------------------------|
+| Leverages Google's private, high-performance global backbone to carry traffic as close to the end-user as possible before egressing to the public internet. | Uses standard carrier networks to route traffic over the public internet, egressing from Google's network in the region where the workload is hosted. |
+| **Use Case:** Ideal for performance-sensitive, global applications that require the lowest latency, highest reliability, and global load balancing capabilities. | **Use Case:** A cost-effective choice for applications that are less sensitive to latency or are primarily serving users within a single geographic region. |
 
 Choosing Premium Tier provides superior performance and reliability by keeping traffic on Google's private network for as long as possible, minimizing exposure to public internet congestion and variability. Standard Tier offers a quality of service comparable to other cloud providers at a lower price point, making it suitable for less critical workloads.
 

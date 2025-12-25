@@ -50,13 +50,16 @@
 
 Before diving into the technical details of Compute Engine, it is essential to understand where it sits within Google Cloud's broader compute ecosystem. The Professional Cloud Architect exam frequently tests a candidate's ability to select the appropriate compute service based on workload characteristics, operational complexity, and business requirements. Google Cloud offers a spectrum of compute abstractions, each trading off control for operational simplicity.
 
-| Service | Abstraction Level | Management Burden | Scaling Model | Primary Use Case |
-|---------|-------------------|-------------------|---------------|------------------|
-| **Compute Engine** | Infrastructure as a Service (IaaS) | High – You manage OS, patches, scaling | Manual or auto-scaling via MIGs | Legacy applications, full OS control, lift-and-shift migrations |
-| **Google Kubernetes Engine (GKE)** | Container as a Service (CaaS) | Medium – Google manages control plane, you manage nodes and workloads | HPA + Cluster Autoscaler | Microservices, containerized applications, multi-cloud portability |
-| **Cloud Run** | Serverless Containers | Low – Fully managed runtime | Automatic, scales to zero | Stateless HTTP services, event-driven workloads |
-| **Cloud Functions** | Function as a Service (FaaS) | Very Low – Just code | Automatic, scales to zero | Single-purpose event handlers, lightweight integrations |
-| **App Engine** | Platform as a Service (PaaS) | Very Low – Fully managed platform | Automatic | Web applications, mobile backends, legacy PaaS migrations |
+
+**Google Cloud Compute Service Comparison**
+
+| Service                    | Abstraction Level                  | Management Burden                        | Scaling Model                        | Primary Use Case                                      |
+|:--------------------------|:-----------------------------------|:-----------------------------------------|:-------------------------------------|:------------------------------------------------------|
+| **Compute Engine**         | Infrastructure as a Service (IaaS) | High – You manage OS, patches, scaling   | Manual or auto-scaling via MIGs      | Legacy applications, full OS control, lift-and-shift migrations |
+| **Google Kubernetes Engine (GKE)** | Container as a Service (CaaS) | Medium – Google manages control plane, you manage nodes and workloads | HPA + Cluster Autoscaler             | Microservices, containerized applications, multi-cloud portability |
+| **Cloud Run**              | Serverless Containers              | Low – Fully managed runtime              | Automatic, scales to zero            | Stateless HTTP services, event-driven workloads        |
+| **Cloud Functions**        | Function as a Service (FaaS)       | Very Low – Just code                     | Automatic, scales to zero            | Single-purpose event handlers, lightweight integrations|
+| **App Engine**             | Platform as a Service (PaaS)       | Very Low – Fully managed platform        | Automatic                            | Web applications, mobile backends, legacy PaaS migrations |
 
 **Architectural Decision Principle:** The exam rewards candidates who understand that **higher abstraction is generally preferable** when requirements allow. However, Compute Engine remains the appropriate choice when:
 - The application requires full operating system access (custom kernel modules, system-level configuration)
@@ -78,14 +81,17 @@ The first and most consequential decision when provisioning a VM is selecting th
 
 **Machine Type Families and Use Cases:**
 
-| Family | vCPU:Memory Ratio | Price Tier | Optimized For | Architectural Guidance |
-|--------|-------------------|------------|---------------|------------------------|
-| **E2 (General Purpose)** | 1:4 (standard) | Lowest | Web servers, development environments, microservices, small databases | Default choice for cost-sensitive, general workloads; shared-core variants (e2-micro, e2-small) eligible for free tier |
-| **N2/N2D (Balanced)** | 1:4 (standard), custom ratios available | Medium | Application servers, databases, enterprise applications | N2D (AMD EPYC) offers ~10-15% cost savings over N2 (Intel Cascade Lake); supports custom machine types for fine-grained rightsizing |
-| **C2/C2D (Compute-Optimized)** | 1:2 (high vCPU, lower memory) | High | High-performance computing (HPC), batch processing, video encoding, gaming servers | Premium pricing justified only when CPU is the bottleneck; avoid for I/O-bound or memory-bound workloads |
-| **M2/M3 (Memory-Optimized)** | 1:8 to 1:12 (high memory) | Premium | In-memory databases (Redis, Memcached), SAP HANA, large-scale analytics | Most expensive per VM; use only when memory is the primary bottleneck; M3 (latest generation) offers better price-performance than M2 |
-| **T2D/T2A (Tau, Scale-Out)** | 1:4 (standard) | Low | Scale-out web applications, containerized microservices, media transcoding | Tau VMs (ARM-based for T2A, AMD for T2D) provide ~25% cost savings over comparable E2; ideal for horizontally-scalable workloads |
-| **A2/A3 (Accelerator-Optimized)** | Variable (with GPUs) | Premium | Machine learning training, 3D rendering, scientific simulations | Includes NVIDIA A100 or H100 GPUs; billed per GPU-hour in addition to VM cost |
+
+**Machine Type Families and Use Cases**
+
+| Family                      | vCPU:Memory Ratio                  | Price Tier | Optimized For                                         | Architectural Guidance                                                                 |
+|:---------------------------|:-----------------------------------|:-----------|:-----------------------------------------------------|:--------------------------------------------------------------------------------------|
+| **E2 (General Purpose)**    | 1:4 (standard)                     | Lowest     | Web servers, development environments, microservices, small databases | Default choice for cost-sensitive, general workloads; shared-core variants (e2-micro, e2-small) eligible for free tier |
+| **N2/N2D (Balanced)**      | 1:4 (standard), custom ratios available | Medium     | Application servers, databases, enterprise applications | N2D (AMD EPYC) offers ~10-15% cost savings over N2 (Intel Cascade Lake); supports custom machine types for fine-grained rightsizing |
+| **C2/C2D (Compute-Optimized)** | 1:2 (high vCPU, lower memory)    | High       | High-performance computing (HPC), batch processing, video encoding, gaming servers | Premium pricing justified only when CPU is the bottleneck; avoid for I/O-bound or memory-bound workloads |
+| **M2/M3 (Memory-Optimized)** | 1:8 to 1:12 (high memory)         | Premium    | In-memory databases (Redis, Memcached), SAP HANA, large-scale analytics | Most expensive per VM; use only when memory is the primary bottleneck; M3 (latest generation) offers better price-performance than M2 |
+| **T2D/T2A (Tau, Scale-Out)** | 1:4 (standard)                    | Low        | Scale-out web applications, containerized microservices, media transcoding | Tau VMs (ARM-based for T2A, AMD for T2D) provide ~25% cost savings over comparable E2; ideal for horizontally-scalable workloads |
+| **A2/A3 (Accelerator-Optimized)** | Variable (with GPUs)           | Premium    | Machine learning training, 3D rendering, scientific simulations | Includes NVIDIA A100 or H100 GPUs; billed per GPU-hour in addition to VM cost |
 
 **Custom Machine Types: When and How to Use Them**
 
@@ -108,13 +114,16 @@ Compute Engine VMs are provisioned in specific zones within regions. The choice 
 
 **High Availability Patterns:**
 
-| Pattern | Configuration | Availability Estimate | Cost Multiplier | Use Case |
-|---------|---------------|----------------------|-----------------|----------|
-| **Single VM (single zone)** | 1 VM in one zone | ~95-99% | 1x | Development, testing, non-critical workloads |
-| **MIG (single zone)** | Multiple VMs in one zone | ~99.5% | Variable (auto-scaling) | Production workloads, moderate availability |
-| **Regional MIG (multi-zone)** | Multiple VMs across 3+ zones | ~99.9% | Variable (auto-scaling) | Mission-critical production workloads |
-| **Multi-Region Active-Standby** | Primary region + standby region | ~99.95% | 2x minimum | Disaster recovery, global applications |
-| **Multi-Region Active-Active** | Load balanced across regions | ~99.99%+ | 2x+ | Global applications, zero-downtime requirements |
+
+**High Availability Patterns**
+
+| Pattern                      | Configuration                  | Availability Estimate | Cost Multiplier | Use Case                                         |
+|:----------------------------|:-------------------------------|:---------------------|:---------------|:-------------------------------------------------|
+| **Single VM (single zone)**  | 1 VM in one zone               | ~95-99%              | 1x              | Development, testing, non-critical workloads      |
+| **MIG (single zone)**        | Multiple VMs in one zone       | ~99.5%               | Variable (auto-scaling) | Production workloads, moderate availability       |
+| **Regional MIG (multi-zone)**| Multiple VMs across 3+ zones   | ~99.9%               | Variable (auto-scaling) | Mission-critical production workloads             |
+| **Multi-Region Active-Standby** | Primary region + standby region | ~99.95%           | 2x minimum      | Disaster recovery, global applications            |
+| **Multi-Region Active-Active**  | Load balanced across regions  | ~99.99%+             | 2x+             | Global applications, zero-downtime requirements   |
 
 **Exam Guidance:** For any production workload, the exam expects Regional MIGs as the default answer. Single-zone deployments are acceptable only for non-critical scenarios explicitly described in the question.
 

@@ -11,13 +11,16 @@ The central benefit explored throughout this paper is the acceleration of delive
 
 Selecting the appropriate serverless compute service is a critical architectural decision. The choice between Cloud Run, App Engine, and Cloud Functions depends heavily on specific workload requirements, existing application architecture, and team skill sets. This decision has significant implications for an application's scalability, cost-effectiveness, and long-term operational overhead. The following table provides a strategic comparison of their core characteristics to guide this selection process.
 
-| Feature | Cloud Run | App Engine | Cloud Functions |
-|---|---|---|---|
-| Primary Use Case | Stateless Containers | Managed Web/Mobile Apps | Event-Driven Workloads |
-| Deployment Unit | Container Image | Source Code | Function Code |
-| Key Abstraction | Managed Containers | Platform as a Service | Function as a Service |
+
+**Serverless Compute Service Comparison**
+
+| Feature           | Cloud Run                | App Engine                  | Cloud Functions                                               |
+|:------------------|:------------------------|:---------------------------|:--------------------------------------------------------------|
+| Primary Use Case  | Stateless Containers     | Managed Web/Mobile Apps     | Event-Driven Workloads                                        |
+| Deployment Unit   | Container Image          | Source Code                 | Function Code                                                 |
+| Key Abstraction   | Managed Containers       | Platform as a Service       | Function as a Service                                         |
 | Runtime Flexibility | Any containerizable language | Limited runtimes (Standard) vs. Custom (Flexible) | Supported runtimes (Node.js, Python, Go, etc.) |
-| Scaling Model | Scales to zero based on traffic demand | Standard scales to zero; Flexible offers more control | Scales to zero based on events. Gen 2 is built on Cloud Run for superior performance and scaling. |
+| Scaling Model     | Scales to zero based on traffic demand | Standard scales to zero; Flexible offers more control | Scales to zero based on events. Gen 2 is built on Cloud Run for superior performance and scaling. |
 
 With this high-level comparison established, we can proceed with a detailed analysis of each service, beginning with the most flexible and modern container-based option, Cloud Run.
 
@@ -60,11 +63,14 @@ App Engine is Google Cloud's fully managed Platform as a Service (PaaS), designe
 
 A primary architectural decision when using App Engine is the choice between its two environments, each offering a different balance of control and convenience.
 
-| Feature | App Engine Standard Environment | App Engine Flexible Environment |
-|---|---|---|
+
+**App Engine Environments Comparison**
+
+| Feature         | App Engine Standard Environment         | App Engine Flexible Environment                |
+|:---------------|:----------------------------------------|:-----------------------------------------------|
 | Runtime Support | Supports a specific, limited set of runtimes. | Supports any runtime via custom Docker containers. |
-| Scaling Behavior | Scales rapidly and can scale down to zero. | Configurable scaling (manual, basic, auto); does not scale to zero. |
-| Level of Control | Sandboxed environment with less user control. | Provides more control over the underlying instance. |
+| Scaling Behavior| Scales rapidly and can scale down to zero.    | Configurable scaling (manual, basic, auto); does not scale to zero. |
+| Level of Control| Sandboxed environment with less user control. | Provides more control over the underlying instance. |
 
 ### 4.2 State Management and Background Processing
 

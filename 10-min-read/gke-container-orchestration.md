@@ -81,17 +81,20 @@ Before diving into GKE-specific features, it is essential to understand the core
 
 **Key Kubernetes Objects:**
 
-| Object | Purpose | Lifecycle | Exam Relevance |
-|--------|---------|-----------|----------------|
-| **Pod** | Smallest deployable unit; one or more containers sharing network and storage | Ephemeral (recreated on failure) | High – Understand pod vs container distinction |
-| **Deployment** | Manages a replicated set of pods; declarative updates, rollbacks | Long-lived (until explicitly deleted) | Very High – Default workload controller |
-| **Service** | Stable network endpoint for accessing pods; load balancing | Long-lived | Very High – Service types (ClusterIP, LoadBalancer, NodePort) |
-| **ConfigMap** | Configuration data stored as key-value pairs or files | Long-lived | Medium – Externalize configuration |
-| **Secret** | Sensitive data (passwords, tokens, keys) stored encrypted at rest | Long-lived | High – Understand vs ConfigMap, use with Workload Identity |
-| **Ingress** | HTTP(S) routing rules to services; manages external access | Long-lived | Very High – L7 load balancing, TLS termination |
-| **StatefulSet** | Manages stateful applications with stable network identities and persistent storage | Long-lived | Medium – Databases, distributed systems |
-| **DaemonSet** | Ensures a pod runs on every node (e.g., logging, monitoring agents) | Long-lived | Low – Understand for system workloads |
-| **Job/CronJob** | Batch processing; run-to-completion tasks | Ephemeral (Job) / Scheduled (CronJob) | Medium – Batch workloads, scheduled tasks |
+
+**Kubernetes Object Types**
+
+| Object         | Purpose                                                        | Lifecycle                        | Exam Relevance                                      |
+|:--------------|:---------------------------------------------------------------|:----------------------------------|:----------------------------------------------------|
+| **Pod**       | Smallest deployable unit; one or more containers sharing network and storage | Ephemeral (recreated on failure) | High – Understand pod vs container distinction       |
+| **Deployment**| Manages a replicated set of pods; declarative updates, rollbacks| Long-lived (until explicitly deleted) | Very High – Default workload controller         |
+| **Service**   | Stable network endpoint for accessing pods; load balancing      | Long-lived                        | Very High – Service types (ClusterIP, LoadBalancer, NodePort) |
+| **ConfigMap** | Configuration data stored as key-value pairs or files           | Long-lived                        | Medium – Externalize configuration                   |
+| **Secret**    | Sensitive data (passwords, tokens, keys) stored encrypted at rest| Long-lived                        | High – Understand vs ConfigMap, use with Workload Identity |
+| **Ingress**   | HTTP(S) routing rules to services; manages external access      | Long-lived                        | Very High – L7 load balancing, TLS termination       |
+| **StatefulSet**| Manages stateful applications with stable network identities and persistent storage | Long-lived | Medium – Databases, distributed systems         |
+| **DaemonSet** | Ensures a pod runs on every node (e.g., logging, monitoring agents)| Long-lived                     | Low – Understand for system workloads                |
+| **Job/CronJob**| Batch processing; run-to-completion tasks                      | Ephemeral (Job) / Scheduled (CronJob) | Medium – Batch workloads, scheduled tasks      |
 
 **Control Plane vs Data Plane:**
 
@@ -106,14 +109,17 @@ One of the key value propositions of GKE is **managed control plane operations**
 
 **GKE Advantages:**
 
-| Concern | Self-Managed Kubernetes | GKE (Managed Kubernetes) |
-|---------|------------------------|--------------------------|
+
+**GKE vs. Self-Managed Kubernetes**
+
+| Concern                   | Self-Managed Kubernetes                                 | GKE (Managed Kubernetes)                                         |
+|:-------------------------|:--------------------------------------------------------|:-----------------------------------------------------------------|
 | **Control Plane Availability** | You manage HA configuration (multi-master, etcd backups) | Google provides 99.95% SLA for Zonal, 99.99% for Regional clusters |
-| **Upgrades** | Manual upgrades, downtime risk | Automated upgrades, zero-downtime for Regional clusters |
-| **Security Patching** | You apply patches to control plane and nodes | Google applies patches to control plane; node auto-upgrade available |
-| **Monitoring** | Deploy and manage Prometheus, Grafana, ELK stack | Integrated Cloud Logging, Monitoring, Managed Prometheus |
-| **Cost** | Pay for all control plane VMs | Control plane free for Zonal clusters; minimal cost for Regional |
-| **Operational Burden** | High (24/7 on-call for cluster issues) | Low (Google handles control plane incidents) |
+| **Upgrades**             | Manual upgrades, downtime risk                          | Automated upgrades, zero-downtime for Regional clusters           |
+| **Security Patching**    | You apply patches to control plane and nodes            | Google applies patches to control plane; node auto-upgrade available |
+| **Monitoring**           | Deploy and manage Prometheus, Grafana, ELK stack        | Integrated Cloud Logging, Monitoring, Managed Prometheus          |
+| **Cost**                 | Pay for all control plane VMs                           | Control plane free for Zonal clusters; minimal cost for Regional  |
+| **Operational Burden**   | High (24/7 on-call for cluster issues)                  | Low (Google handles control plane incidents)                      |
 
 **Exam Scenario:** If a question mentions "reduce operational overhead" or "minimize management burden," GKE is strongly preferred over self-managed Kubernetes.
 
@@ -123,17 +129,20 @@ The PCA exam frequently tests when to choose GKE over Compute Engine (and vice v
 
 **Decision Matrix:**
 
-| Requirement | Choose GKE | Choose Compute Engine |
-|-------------|------------|----------------------|
-| **Microservices architecture** | ✅ Yes | ❌ No (too much manual orchestration) |
-| **Containerized applications** | ✅ Yes | ❌ Not optimal (can use Docker on VMs but lacks orchestration) |
-| **Need Kubernetes portability (multi-cloud)** | ✅ Yes | ❌ No (GCP-specific VMs) |
-| **Legacy monolith requiring full OS control** | ❌ No | ✅ Yes |
-| **Application requires specific kernel modules** | ❌ No (container isolation limits) | ✅ Yes |
-| **Windows applications (not containerized)** | ❌ No (GKE is Linux-first) | ✅ Yes |
-| **Lift-and-shift migration** | ❌ No (requires containerization) | ✅ Yes |
-| **Auto-scaling to zero** | ❌ No (use Cloud Run instead) | ❌ No |
-| **Prefer managed orchestration** | ✅ Yes | ❌ No (manual scaling, health checks) |
+
+**GKE vs. Compute Engine Decision Matrix**
+
+| Requirement                        | Choose GKE | Choose Compute Engine                                 |
+|:-----------------------------------|:-----------|:-----------------------------------------------------|
+| **Microservices architecture**      | ✅ Yes     | ❌ No (too much manual orchestration)                 |
+| **Containerized applications**      | ✅ Yes     | ❌ Not optimal (can use Docker on VMs but lacks orchestration) |
+| **Need Kubernetes portability (multi-cloud)** | ✅ Yes | ❌ No (GCP-specific VMs)                             |
+| **Legacy monolith requiring full OS control** | ❌ No  | ✅ Yes                                              |
+| **Application requires specific kernel modules** | ❌ No (container isolation limits) | ✅ Yes           |
+| **Windows applications (not containerized)** | ❌ No (GKE is Linux-first) | ✅ Yes                |
+| **Lift-and-shift migration**        | ❌ No (requires containerization) | ✅ Yes                |
+| **Auto-scaling to zero**            | ❌ No (use Cloud Run instead) | ❌ No                  |
+| **Prefer managed orchestration**    | ✅ Yes     | ❌ No (manual scaling, health checks)                 |
 
 **Exam Rule:** If the scenario mentions **microservices**, **containers**, **Kubernetes**, or **portability**, GKE is the answer. If it mentions **legacy applications**, **full OS access**, or **specific hardware/kernel requirements**, choose Compute Engine.
 
