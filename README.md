@@ -246,5 +246,14 @@ Based on Google Cloud documentation, Well-Architected Framework principles, and 
 
 ---
 
+
+---
+
+## ⚠️ Disclaimer
+
+This repository is **not an official Google guide**. All content was generated and curated using AI tools including ChatGPT, Claude Sonnet, and Notebook LM. While every effort has been made to ensure accuracy and alignment with the Google Cloud Professional Cloud Architect exam, this material is for educational and self-study purposes only. Always cross-reference with official Google Cloud documentation for authoritative guidance.
+
+---
+
 **Last Updated:** December 2025  
 **Exam Version:** Based on current PCA exam guide (2024-2025)
