@@ -4,22 +4,35 @@ A comprehensive collection of study materials, strategic whitepapers, cheat shee
 
 ---
 
+
 ## 📚 Repository Structure
 
 ```
 google-professional-cloud-architect-prep/
 ├── 10-min-read/                    # Deep-dive strategic whitepapers (~10-15 min read)
+│   ├── architecting-operational-excellence.md
+│   ├── Architecting a Defense-in-Depth Strategy for Google Cloud Networks.md
+│   ├── compute-engine-and-managed-infrastructure.md
+│   ├── cost-optimisation.md
+│   ├── gke-container-orchestration.md
 │   ├── modernize-enterprise-security.md
-│   └── architecting-operational-excellence.md
+│   ├── serverless-and-registry-architecture.md
+│   └── storage.md
 ├── cheatsheets/                     # Quick reference guides for exam day
+│   ├── compute-services.md
 │   ├── iam-cloud-identity-cheat-sheet.md
-│   └── observability.md
-├── architecting-operational-excellence.md  # (Should be in 10-min-read/)
+│   ├── networking-cheat-sheet.md
+│   ├── observability.md
+│   ├── serverless-and-registry-cheat-sheet.md
+│   └── storage.md
 ├── externallinks.md                 # Curated external resources
 ├── gcp-services-availability.md     # SLA and availability reference
 ├── images/                          # Diagrams and visual aids
-├── pdf/                            # PDF exports for offline study
-└── README.md                       # This file
+├── pdf/                             # PDF exports for offline study
+├── study-plan-weeks/                # Week-by-week study plans
+│   ├── week-1.md ... week-6.md
+├── suggestions.md                   # Feedback and improvement suggestions
+└── README.md                        # This file
 ```
 
 ---
@@ -128,13 +141,14 @@ Curated collection of official documentation and high-quality external resources
 
 | Domain | Coverage | Materials |
 |--------|----------|-----------|
-| **Security & IAM** | ✅ Complete | `10-min-read/modernize-enterprise-security.md`<br>`cheatsheets/iam-cloud-identity-cheat-sheet.md` |
-| **Observability** | ✅ Complete | `10-min-read/architecting-operational-excellence.md`<br>`cheatsheets/observability.md` |
-| **Networking** | ⚠️ Partial | *Recommended: Add VPC, Load Balancer, Hybrid connectivity materials* |
-| **Compute** | ⚠️ Partial | *Recommended: Add Compute Engine, GKE, Serverless comparison* |
-| **Storage & Data** | ⚠️ Partial | *Recommended: Add storage options, BigQuery, database selection* |
-| **Migration** | ❌ Missing | *Recommended: Add migration strategies and tools* |
-| **Cost Optimization** | ⚠️ Partial | Covered within observability; *Recommend: Add comprehensive FinOps guide* |
+
+| **Security & IAM**    | ✅ Complete | `10-min-read/modernize-enterprise-security.md`<br>`cheatsheets/iam-cloud-identity-cheat-sheet.md` |
+| **Observability**     | ✅ Complete | `10-min-read/architecting-operational-excellence.md`<br>`cheatsheets/observability.md` |
+| **Networking**        | ✅ Complete | `10-min-read/Architecting a Defense-in-Depth Strategy for Google Cloud Networks.md`<br>`cheatsheets/networking-cheat-sheet.md` |
+| **Compute**           | ✅ Complete | `10-min-read/compute-engine-and-managed-infrastructure.md`<br>`10-min-read/gke-container-orchestration.md`<br>`10-min-read/serverless-and-registry-architecture.md`<br>`cheatsheets/compute-services.md` |
+| **Storage & Data**    | ✅ Complete | `10-min-read/storage.md`<br>`cheatsheets/storage.md` |
+| **Migration**         | ⚠️ Partial  | *Recommended: Add migration strategies and tools* |
+| **Cost Optimization** | ⚠️ Partial  | `10-min-read/cost-optimisation.md`<br>Covered within observability; *Recommend: Add comprehensive FinOps guide* |
 
 ---
 
@@ -208,14 +222,15 @@ If expanding this repository:
 
 ## 📅 Recommended Study Timeline
 
-| Week | Focus | Materials |
-|------|-------|-----------|
-| 1-2 | IAM & Security | `10-min-read/modernize-enterprise-security.md` |
-| 2-3 | Observability & SRE | `10-min-read/architecting-operational-excellence.md` |
-| 3-4 | Networking & Compute | *(Add new materials)* |
-| 4-5 | Storage, Data, Migration | *(Add new materials)* |
-| 5-6 | Practice exams & review | All cheat sheets |
-| 6 | Final review | Quick scan of all materials |
+
+| Week | Focus                    | Materials |
+|------|--------------------------|-----------|
+| 1-2  | IAM & Security           | `10-min-read/modernize-enterprise-security.md` |
+| 2-3  | Observability & SRE      | `10-min-read/architecting-operational-excellence.md` |
+| 3-4  | Networking & Compute     | `10-min-read/Architecting a Defense-in-Depth Strategy for Google Cloud Networks.md`<br>`10-min-read/compute-engine-and-managed-infrastructure.md`<br>`10-min-read/gke-container-orchestration.md`<br>`10-min-read/serverless-and-registry-architecture.md` |
+| 4-5  | Storage, Data, Migration | `10-min-read/storage.md`<br>`cheatsheets/storage.md` |
+| 5-6  | Practice exams & review  | All cheat sheets |
+| 6    | Final review             | Quick scan of all materials |
 
 ---
 
