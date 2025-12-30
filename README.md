@@ -176,46 +176,6 @@ All materials are written in **Markdown** for easy viewing and version control.
 
 ---
 
-## 🚀 Suggested Enhancements
-
-### **High Priority (Exam Coverage Gaps)**
-1. **Networking Deep-Dive** (10-min-read format)
-   - VPC design patterns
-   - Hybrid connectivity (VPN, Interconnect)
-   - Load Balancer selection
-   - Cloud Armor, Cloud CDN
-   - Private Google Access, VPC Peering
-
-2. **Compute Architecture Guide** (10-min-read format)
-   - Compute Engine vs GKE vs Serverless decision matrix
-   - GKE architecture patterns
-   - Serverless (Cloud Run, Functions, App Engine) comparison
-   - Managed Instance Groups and autoscaling
-
-3. **Storage & Data Services** (cheat sheet format)
-   - Storage options decision tree (GCS, Filestore, Persistent Disk)
-   - Database selection guide (SQL, Firestore, Bigtable, Spanner)
-   - BigQuery architecture patterns
-   - Data lifecycle management
-
-4. **Migration Strategies** (cheat sheet format)
-   - Migration path selection
-   - Migrate for Compute Engine
-   - Database migration tools
-   - Data transfer options
-
-### **Medium Priority (Completeness)**
-5. **Comprehensive FinOps Guide** (10-min-read format)
-6. **Kubernetes/GKE Deep-Dive** (10-min-read format)
-7. **Disaster Recovery Patterns** (cheat sheet format)
-8. **Well-Architected Framework Summary** (cheat sheet format)
-
-### **Low Priority (Organization)**
-9. Move `architecting-operational-excellence.md` to `10-min-read/` directory
-10. Create `study-plans/` directory for week-by-week guides
-11. Add practice exam question patterns by domain
-
----
 
 ## 🤝 Contribution Guidelines
 
@@ -229,7 +189,6 @@ If expanding this repository:
 ---
 
 
-
 ## What this repo does NOT cover (and why)
 
 This repository is focused on strategic study materials, architecture guides, and concise cheat sheets for the PCA exam. To keep it lean and trustworthy, it intentionally does NOT include:
@@ -239,20 +198,6 @@ This repository is focused on strategic study materials, architecture guides, an
 - **Service Deep Dives:** No exhaustive, service-by-service documentation
 
 The goal is to provide high-level guidance, exam triggers, and architectural context—without bloat. For hands-on practice, official Google Cloud labs and documentation are recommended.
-
----
-
-## 📅 Recommended Study Timeline
-
-
-| Week | Focus                    | Materials |
-|------|--------------------------|-----------|
-| 1-2  | IAM & Security           | `10-min-read/modernize-enterprise-security.md` |
-| 2-3  | Observability & SRE      | `10-min-read/architecting-operational-excellence.md` |
-| 3-4  | Networking & Compute     | `10-min-read/Architecting a Defense-in-Depth Strategy for Google Cloud Networks.md`<br>`10-min-read/compute-engine-and-managed-infrastructure.md`<br>`10-min-read/gke-container-orchestration.md`<br>`10-min-read/serverless-and-registry-architecture.md` |
-| 4-5  | Storage, Data, Migration | `10-min-read/storage.md`<br>`cheatsheets/storage.md` |
-| 5-6  | Practice exams & review  | All cheat sheets |
-| 6    | Final review             | Quick scan of all materials |
 
 ---
 
