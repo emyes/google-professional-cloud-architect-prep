@@ -139,18 +139,19 @@ Curated collection of official documentation and high-quality external resources
 
 ## 🎯 Key Topics Coverage
 
+
 | Domain | Coverage | Materials |
 |--------|----------|-----------|
-
-| **Security & IAM**    | ✅ Complete | `10-min-read/modernize-enterprise-security.md`<br>`cheatsheets/iam-cloud-identity-cheat-sheet.md` |
+| **Security & IAM**    | ✅ Complete | `10-min-read/modernize-enterprise-security.md`<br>`cheatsheets/iam-cloud-identity-cheat-sheet.md`<br>`10-min-read/data-and-security.md`<br>`cheatsheets/data-and-security-cheatsheet.md` |
 | **Observability**     | ✅ Complete | `10-min-read/architecting-operational-excellence.md`<br>`cheatsheets/observability.md` |
 | **Networking**        | ✅ Complete | `10-min-read/Architecting a Defense-in-Depth Strategy for Google Cloud Networks.md`<br>`cheatsheets/networking-cheat-sheet.md` |
 | **Compute**           | ✅ Complete | `10-min-read/compute-engine-and-managed-infrastructure.md`<br>`10-min-read/gke-container-orchestration.md`<br>`10-min-read/serverless-and-registry-architecture.md`<br>`cheatsheets/compute-services.md` |
-| **Storage & Data**    | ✅ Complete | `10-min-read/storage.md`<br>`cheatsheets/storage.md` |
+| **Storage & Data**    | ✅ Complete | `10-min-read/storage.md`<br>`cheatsheets/storage-cs.md` |
+| **AI & ML**           | ✅ Complete | `10-min-read/ai.md`<br>`cheatsheets/ai-cheatsheet.md` |
+| **Serverless & Registry** | ✅ Complete | `10-min-read/serverless-and-registry-architecture.md`<br>`cheatsheets/serverless-and-registry-cheat-sheet.md` |
 | **Migration**         | ⚠️ Partial  | *Recommended: Add migration strategies and tools* |
 | **Cost Optimization** | ⚠️ Partial  | `10-min-read/cost-optimisation.md`<br>Covered within observability; *Recommend: Add comprehensive FinOps guide* |
 
----
 
 ## 📝 Document Formats
 
@@ -217,6 +218,32 @@ If expanding this repository:
 - Use consistent formatting and table of contents
 - Include exam decision triggers and anti-patterns
 - Add ASCII architecture diagrams where helpful
+
+---
+
+
+
+## 🧭 PCA Exam Coverage Summary
+
+**This repository now provides complete coverage for all topics in the PCA study plan weeks, including:**
+
+- **Security & IAM**: Identity, access, data protection, defense-in-depth, and governance
+- **Networking**: VPC, hybrid connectivity, load balancing, security, and monitoring
+- **Compute**: Compute Engine, GKE, serverless, scaling, and migration patterns
+- **Storage & Data**: Object, relational, NoSQL, analytics, lifecycle, and governance
+- **AI & ML**: Pre-trained APIs, Vertex AI, MLOps, generative AI, security, and compliance
+- **Serverless & Registry**: Cloud Run, Functions, App Engine, Artifact Registry
+- **Observability**: Logging, monitoring, SRE, audit, and cost governance
+- **Cost Optimization & FinOps**: Cost control, billing, FinOps, and architectural best practices
+- **Migration & Modernization**: RPO/RTO, Backup & DR, Migration Center, phased migration, emulators, Chrome Enterprise, SOC 2
+- **Well-Architected Framework**: Five pillars, GCP service mapping, scenario triggers
+- **Disaster Recovery Patterns**: DR strategies, GCP services, best practices
+
+**Quick Reference:**
+- All domains have both deep-dive whitepapers (10-min-read/) and concise exam-day cheat sheets (cheatsheets/)
+- New cheat sheets: [well-architected-framework-cheatsheet.md](cheatsheets/well-architected-framework-cheatsheet.md), [dr-patterns-cheatsheet.md](cheatsheets/dr-patterns-cheatsheet.md), [finops-cheatsheet.md](cheatsheets/finops-cheatsheet.md), [migration-cheatsheet.md](cheatsheets/migration-cheatsheet.md)
+- AI/ML, migration, DR, and FinOps content is fully up-to-date for the latest PCA exam blueprint
+- All study plan weeks topics are now explicitly addressed—no major gaps remain
 
 ---
 
