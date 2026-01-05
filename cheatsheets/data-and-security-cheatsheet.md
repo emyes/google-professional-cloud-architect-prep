@@ -32,6 +32,35 @@ This cheat sheet summarizes the most important Google Cloud data processing and 
 - Visual, serverless data preparation
 - ML-powered transformations; integrates with BigQuery, Cloud Storage
 
+**Cloud Composer (Apache Airflow)**
+- Managed workflow orchestration for complex data pipelines
+- **DAG (Directed Acyclic Graph):** Python-based workflow definition
+- **Scheduling:** Cron-based, event-driven (Pub/Sub), sensor triggers
+- **Built on GKE:** Scalable, resilient architecture with auto-healing
+- **Monitoring:** Airflow UI, Cloud Logging, Monitoring integration
+- **Use Cases:**
+  - Orchestrate multi-step ETL/ELT pipelines
+  - Coordinate BigQuery, Dataflow, Dataproc jobs
+  - Dependency management across data processing tasks
+  - Schedule ML training pipelines (alternative to Vertex AI Pipelines)
+
+**When to Use:**
+
+| Requirement | Use Cloud Composer | Use Cloud Scheduler | Use Dataflow |
+|-------------|-------------------|-------------------|-------------|
+| Complex multi-step workflows | ✅ | ❌ | ❌ |
+| Dynamic task dependencies | ✅ | ❌ | ❌ |
+| Simple cron jobs | ❌ | ✅ | ❌ |
+| Real-time stream processing | ❌ | ❌ | ✅ |
+| Python-based orchestration | ✅ | ❌ | ✅ (Beam SDK) |
+| Visual DAG editor | ✅ (Airflow UI) | ❌ | ❌ |
+
+**Exam Triggers:**
+- "Orchestrate multi-step data pipeline with dependencies" → **Cloud Composer**
+- "Schedule daily BigQuery exports to Cloud Storage" → **Cloud Scheduler** (simple) or **Composer** (complex)
+- "Coordinate Dataproc, BigQuery, and ML training jobs" → **Cloud Composer**
+- "Python-based workflow with conditional logic" → **Cloud Composer DAG**
+
 ---
 
 ## Content Delivery & API Management

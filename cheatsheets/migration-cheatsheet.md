@@ -34,6 +34,98 @@
 
 ---
 
+## Data Transfer Services
+
+### Storage Transfer Service
+**Purpose:** Managed, scalable data transfers to Cloud Storage from various sources.
+
+**Supported Sources:**
+- **AWS S3** → Cloud Storage (cross-cloud migration)
+- **Azure Blob Storage** → Cloud Storage
+- **HTTP/HTTPS sources** → Cloud Storage (e.g., public datasets)
+- **Cloud Storage bucket** → Cloud Storage bucket (cross-region, cross-project)
+- **On-premises** → Cloud Storage (via Transfer Service for on-premises data)
+
+**Key Features:**
+- **Scheduling:** One-time or recurring transfers (daily, weekly)
+- **Filtering:** Include/exclude by prefix, creation date, file extension
+- **Bandwidth Control:** Throttle transfer rate to avoid network saturation
+- **Deletion Options:** Delete source files after transfer (migration mode)
+- **Metadata Preservation:** Retain timestamps, ACLs, storage class
+- **Event Notifications:** Pub/Sub notifications on transfer completion
+
+**Use Cases:**
+- Migrate data from AWS S3 to GCS (cloud-to-cloud)
+- Periodic backups from on-prem to Cloud Storage
+- Data lake ingestion from HTTP sources
+- Cross-region bucket replication
+
+**Exam Trigger:** *"Migrate 100TB from AWS S3 to Cloud Storage"* → **Storage Transfer Service**
+
+---
+
+### Transfer Appliance
+**Purpose:** Physical, rack-mountable device for offline data transfer (petabyte-scale).
+
+**Specifications:**
+- **Capacity:** 40TB, 100TB, or 480TB models
+- **Process:** Ship appliance → Load data → Return to Google → Upload to GCS
+- **Encryption:** AES-256 encryption at rest
+- **Transfer Speed:** Faster than network for large datasets (weeks → days)
+
+**When to Use:**
+- **Network constraints:** Limited bandwidth, high cost for egress
+- **Massive datasets:** Multi-petabyte migrations (>100TB)
+- **Time-sensitive:** Faster than network transfer (calculate: data size / bandwidth)
+
+**Decision Formula:**
+```
+Network Transfer Time = Data Size (GB) / (Bandwidth (Mbps) × 0.125 × 86400 seconds)
+If > 1 week && > 100TB → Consider Transfer Appliance
+```
+
+**Exam Trigger:** *"Migrate 500TB in 2 weeks, limited bandwidth"* → **Transfer Appliance**
+
+---
+
+### BigQuery Data Transfer Service
+**Purpose:** Automated data loading into BigQuery from SaaS applications and Google services.
+
+**Supported Sources:**
+- **Google Ads, Campaign Manager, YouTube Analytics** (marketing data)
+- **Amazon S3** (via scheduled transfers)
+- **Teradata, Amazon Redshift** (data warehouse migrations)
+- **Cloud Storage** (scheduled imports)
+- **Google Play** (app analytics)
+
+**Features:**
+- **Scheduled Transfers:** Daily, weekly, on-demand
+- **Backfill:** Load historical data automatically
+- **Notifications:** Email, Pub/Sub on transfer completion/failure
+- **Managed Service:** No infrastructure, auto-retry on failure
+
+**Use Cases:**
+- Daily ingestion of Google Ads data into BigQuery
+- Automated loading of Cloud Storage CSV files
+- SaaS application data warehousing
+
+**Exam Trigger:** *"Automate daily Google Ads data into BigQuery"* → **BigQuery Data Transfer Service**
+
+---
+
+## Transfer Service Decision Matrix
+
+| Scenario | Solution | Why |
+|----------|----------|-----|
+| AWS S3 → GCS (100TB, good bandwidth) | Storage Transfer Service | Network-based, automated |
+| On-prem → GCS (500TB, limited bandwidth) | Transfer Appliance | Offline, faster than network |
+| Daily Google Ads → BigQuery | BigQuery Data Transfer Service | SaaS automation |
+| HTTP dataset → GCS | Storage Transfer Service | Supports HTTP/HTTPS sources |
+| Petabyte-scale migration (<1 week) | Transfer Appliance | Physical device, fastest |
+| Cross-region GCS replication | Storage Transfer Service | Scheduled bucket-to-bucket |
+
+---
+
 ## Cloud Scheduler
 - **Managed cron job service**
 - **Automate scheduled tasks/workflows**

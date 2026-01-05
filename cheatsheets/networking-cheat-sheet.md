@@ -206,15 +206,156 @@
 
 ---
 
-## Cloud DNS
-- Managed DNS service.
-- Public and Private DNS zones.
-- DNS forwarding enables hybrid name resolution.
+## Cloud DNS (Deep Dive)
 
-**Forwarding Zones:** Forward DNS queries to on-prem servers.
-**Peering Zones:** Enable cross-VPC DNS resolution.
+**Purpose:** Managed, authoritative DNS service with high availability, low latency, and DNSSEC support.
 
-**Exam trigger:** *On-prem ↔ GCP name resolution*
+**Zone Types:**
+
+1. **Public Zones**
+   - Authoritative DNS for internet-facing domains
+   - Globally distributed, anycast service (100% SLA)
+   - Supports A, AAAA, CNAME, MX, TXT, NS, SOA, CAA records
+   - Use case: Host public website DNS
+
+2. **Private Zones**
+   - Internal name resolution within VPC networks
+   - Not visible to the internet
+   - Automatically integrated with VPC (no resolver config needed)
+   - Use case: Internal service discovery (e.g., `db.internal.example.com`)
+
+3. **Forwarding Zones**
+   - Conditional forwarding to on-premises or external DNS servers
+   - Queries for specified domains forwarded to target nameservers
+   - Use case: Hybrid cloud DNS resolution
+   - Example: Forward `*.corp.local` to on-prem DNS at `10.1.1.53`
+
+4. **Peering Zones**
+   - Enable DNS resolution across VPC networks
+   - VPC A can resolve private zones in VPC B
+   - Use case: Multi-project architectures, Shared VPC alternatives
+   - Limitation: One-way peering (must configure both directions for bidirectional)
+
+**Key Features:**
+
+* **DNSSEC:** Cryptographic authentication of DNS responses (prevents cache poisoning)
+  - State: `on`, `off`, `transfer` (for migrations)
+  - Requires key signing and zone signing keys
+
+* **Split-Horizon DNS:** Different responses for internal vs external queries
+  - Public zone: `api.example.com` → External IP (34.x.x.x)
+  - Private zone: `api.example.com` → Internal IP (10.x.x.x)
+  - Use case: Reduce egress costs, improve latency
+
+* **Routing Policies:** (Geo-based, weighted, failover)
+  - Geo-location: Route based on client location
+  - Weighted round-robin: Distribute traffic across backends
+  - Use case: Global load distribution, DR failover
+
+* **Cloud DNS Policies:**
+  - Apply DNS rules (forwarding, alternative name servers) to specific VPCs
+  - Centralized policy management across projects
+
+**Architecture Patterns:**
+
+**Pattern 1: Hybrid DNS Resolution**
+```
+On-Premises DNS ←→ Cloud DNS Forwarding Zone ←→ Private Zones (VPC)
+      ↓                      ↓                         ↓
+*.corp.local          *.gcp.example.com        VPC Resources
+```
+- Forward `*.gcp.example.com` from on-prem to Cloud DNS
+- Forward `*.corp.local` from Cloud DNS to on-prem
+
+**Pattern 2: Multi-VPC DNS Peering**
+```
+VPC A (Shared VPC)          VPC B (Service Project)
+  Private Zone                 Peering Zone
+  └── db.shared.local   ←──── Points to VPC A
+```
+- VPC B can resolve `db.shared.local` defined in VPC A
+- Requires DNS peering configuration
+
+**Exam Decision Matrix:**
+
+| Requirement | Solution | Key Points |
+|-------------|----------|------------|
+| Public domain hosting | Public Zone | Internet-facing, anycast |
+| Internal service discovery | Private Zone | VPC-scoped, automatic |
+| On-prem ↔ GCP name resolution | Forwarding Zone | Hybrid cloud DNS |
+| Cross-VPC DNS resolution | Peering Zone | Multi-project DNS sharing |
+| Prevent DNS spoofing | DNSSEC | Enable on public zones |
+| Internal/external split DNS | Split-Horizon | Same name, different IPs |
+| Multi-region failover | Routing Policies | Geo/weighted routing |
+
+**Best Practices:**
+
+* Use private zones for internal services (avoid hardcoded IPs)
+* Enable DNSSEC for public-facing domains
+* Use forwarding zones for hybrid connectivity (not VPN DNS servers)
+* Implement split-horizon DNS to reduce egress costs
+* Set appropriate TTLs (low TTL for dynamic services, high for static)
+
+**Common Pitfalls:**
+
+* Forgetting bidirectional DNS forwarding in hybrid setups
+* Overlapping private zone names across VPCs (causes conflicts)
+* Not configuring DNS peering for multi-VPC architectures
+* Using public zones for internal service names (security risk)
+
+**Exam Triggers:**
+
+* "On-prem needs to resolve GCP private DNS" → **Forwarding Zone + Cloud VPN/Interconnect**
+* "Cross-project DNS resolution without VPC peering" → **DNS Peering Zones**
+* "Prevent DNS cache poisoning" → **Enable DNSSEC**
+* "Different IPs for internal vs external clients" → **Split-Horizon DNS**
+* "Route users to nearest region" → **Geo-based routing policy**
+
+---
+
+## Traffic Director
+
+**Purpose:** Global load balancing and traffic management for service mesh architectures.
+
+**Key Capabilities:**
+
+* **Service Mesh Control Plane:** Manages Envoy proxies (sidecar or standalone)
+* **Global Traffic Management:** Route traffic across regions, clusters, and clouds
+* **Advanced Routing:** Header-based, weighted, locality-aware routing
+* **Health Checking:** Proactive health checks and automatic failover
+* **Multi-Cloud Support:** Works with GKE, Compute Engine, and external endpoints
+
+**Architecture:**
+
+```
+Traffic Director (Control Plane)
+        ↓
+    Envoy Proxies (Data Plane)
+        ↓
+   Backend Services (GKE, GCE, On-prem)
+```
+
+**Use Cases:**
+
+* Multi-region service mesh with intelligent routing
+* Hybrid/multi-cloud traffic management
+* Advanced traffic splitting (canary deployments, A/B testing)
+* Locality-aware routing (prefer closest backends)
+
+**Integration:**
+
+* **GKE:** Integrates with Anthos Service Mesh (ASM)
+* **Compute Engine:** Envoy proxies on VMs
+* **Cloud Run:** Can route traffic to Cloud Run services
+
+**Exam Scenarios:**
+
+* "Global traffic management for microservices across GKE clusters" → **Traffic Director**
+* "Service mesh with Envoy proxies" → **Traffic Director + ASM**
+* "Intelligent routing based on HTTP headers" → **Traffic Director routing rules**
+* "Multi-cloud load balancing" → **Traffic Director with external backends**
+
+**Exam trigger:** *Advanced service mesh, multi-region routing, Envoy-based load balancing*
 
 ---
 

@@ -83,6 +83,86 @@
 
 ---
 
+## Cloud Scheduler vs Cloud Tasks
+
+### Cloud Scheduler
+**Purpose:** Managed cron job service for scheduled, recurring tasks.
+
+**Key Characteristics:**
+- **Scheduling:** Cron syntax (minute, hour, day, month, weekday)
+- **Targets:** HTTP endpoints, Pub/Sub, App Engine HTTP
+- **Reliability:** Automatic retries, at-least-once delivery
+- **Use Case:** Time-based automation (e.g., "Run daily at 2 AM")
+
+**Examples:**
+- Daily database backups
+- Hourly report generation
+- Weekly data cleanup
+- Monthly invoice processing
+
+**Exam Trigger:** *"Run a Cloud Function every day at midnight"* → **Cloud Scheduler**
+
+---
+
+### Cloud Tasks
+**Purpose:** Asynchronous task execution with guaranteed delivery and rate control.
+
+**Key Characteristics:**
+- **Task Queues:** FIFO or priority-based task execution
+- **Triggers:** Programmatic (API), not time-based
+- **Rate Limiting:** Control task dispatch rate (max tasks/second)
+- **Deduplication:** Prevent duplicate task execution (task name-based)
+- **Retries:** Configurable retry logic with exponential backoff
+- **Targets:** HTTP endpoints, App Engine HTTP
+
+**Features:**
+- **Scheduled Delay:** Execute task at a specific time (future timestamp)
+- **Task Management:** List, delete, purge queues programmatically
+- **Dead Letter Queue:** Move failed tasks after max retries
+
+**Use Cases:**
+- Offload long-running operations (e.g., image processing after upload)
+- Asynchronous API calls (decouple request/response)
+- Batch processing with rate limits (e.g., 100 emails/minute)
+- Reliable background job execution
+
+**Exam Trigger:** *"Process uploaded images asynchronously with retry logic"* → **Cloud Tasks**
+
+---
+
+## Cloud Scheduler vs Cloud Tasks (Decision Matrix)
+
+| Aspect | Cloud Scheduler | Cloud Tasks |
+|--------|----------------|-------------|
+| **Trigger** | Time-based (cron) | Programmatic (API call) |
+| **Scheduling** | Recurring (hourly, daily, etc.) | One-time or delayed execution |
+| **Use Case** | "Run every day at 2 AM" | "Process this task now/later" |
+| **Rate Control** | N/A (single execution per schedule) | Yes (max dispatch rate) |
+| **Task Management** | N/A (job-level config) | Yes (list, delete, purge) |
+| **Deduplication** | N/A | Yes (task name-based) |
+| **Retries** | Yes (automatic) | Yes (configurable) |
+| **Example** | Daily backup, hourly sync | Image processing, async API |
+
+**When to Use Both:**
+```
+Cloud Scheduler → (triggers) → Cloud Tasks Queue → (processes) → Worker
+```
+- Scheduler triggers tasks on a schedule
+- Tasks queues them for reliable, rate-controlled execution
+
+**Exam Scenarios:**
+
+| Requirement | Solution | Why |
+|-------------|----------|-----|
+| "Run function every Monday at 9 AM" | Cloud Scheduler | Time-based, recurring |
+| "Process uploaded files asynchronously" | Cloud Tasks | Event-driven, async |
+| "Send 10,000 emails with rate limit" | Cloud Tasks | Rate control, queue mgmt |
+| "Daily BigQuery export" | Cloud Scheduler | Scheduled, recurring |
+| "Background job with retries" | Cloud Tasks | Retry logic, reliability |
+| "Hourly data sync" | Cloud Scheduler | Cron-based trigger |
+
+---
+
 ## 4. Cloud Functions
 
 | Feature | Key Points |
